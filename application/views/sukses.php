@@ -20,6 +20,7 @@
    <div class="container">
       <br>
         <h4 class="modal-title"> Anda Memesan Nomor Booth <?=$data->idx?></h4>
+        <br>
          <table class="table">
             <tr>
                <td class="col-lg-2">Luas :</td>
