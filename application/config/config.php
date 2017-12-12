@@ -2,6 +2,27 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
+*---------------------------------------------------------------
+* APPLICATION ENVIRONMENT
+*---------------------------------------------------------------
+*
+* You can load different configurations depending on your
+* current environment. Setting the environment also influences
+* things like logging and error reporting.
+*
+* This can be set to anything, but default usage is:
+*
+*     development
+*     testing
+*     production
+*
+* NOTE: If you change these, also change the error_reporting() code below
+*/
+
+$config['env'] = 'production';
+
+
+/*
 |--------------------------------------------------------------------------
 | Base Site URL
 |--------------------------------------------------------------------------
@@ -23,7 +44,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = '';
+$config['base_url'] = "http://".$_SERVER['SERVER_NAME']."/frontend-floorplan/";
 
 /*
 |--------------------------------------------------------------------------
