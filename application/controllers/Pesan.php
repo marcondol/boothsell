@@ -46,7 +46,43 @@ class Pesan extends CI_Controller {
       }
    }
 
-   public function payment_confirmation($hash){
+   public function order_status($hash){
+      $res = $this->pesan_model->get_payment_data($hash);
+      if(!empty($res)){
+         $booth_id = $res[0]->booth_id;
+         $data = $this->booth_model->get_booth_detail($booth_id);
+         $data['booking_id'] = $res[0]->booking_id;
+         $data["name"] = $res[0]->name;
+         $data["phone"] = $res[0]->phone;
+         $data["booking_dttm"] = $res[0]->booking_dttm;
+         $data["email"] = $res[0]->email;
+         $data["hash"] = $hash;
+         $data["order_state"] = $res[0]->order_state;
+         $this->load->view('konfirmasibayar',$data);
+      }else{
+         echo "Data Tidak ditemukan";
+      }
+   }
 
+   public function payment_confirm(){
+      $hash = $this->input->post('idx');
+      $config['upload_path'] = './uploads/';
+      $config['allowed_types'] = 'gif|jpg|png';
+      // $config['max_size']     = '100';
+      // $config['max_width'] = '1024';
+      // $config['max_height'] = '768';
+      $config['file_name'] = $hash;
+
+      $this->load->library('upload', $config);
+
+      // Alternately you can set preferences by calling the ``initialize()`` method. Useful if you auto-load the class:
+      $this->upload->initialize($config);
+      if ( ! $this->upload->do_upload('img_frm')){
+         $error = array('error' => $this->upload->display_errors());
+      }
+      else{
+         $this->pesan_model->update_paid_order($hash);
+         echo "sukses";
+      }
    }
 }
