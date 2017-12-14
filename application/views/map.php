@@ -16,7 +16,7 @@
   <body>
 
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-default navbar-fixed-top">
+    <nav class="navbar navbar-default ">
       <div class="container">
          <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -25,7 +25,7 @@
                <span class="icon-bar"></span>
                <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Project name</a>
+            <a class="navbar-brand" href="#">Indonesia Fashion Week</a>
          </div>
          <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
@@ -57,6 +57,7 @@
   </div>
   <div class="container">
       <h2 class="center-align">Perhisasan</h2>
+      <button id="reset">reset zoom</button>
       <div id="root" class="center-align"></div>
    </div>
     <footer class="footer">
@@ -68,10 +69,19 @@
    <script type="text/javascript">
       var svg = d3.select('#root')
                   .append('svg')
-                  .attr('width','1280px')
+                  .attr('width','1000px')
                   .attr('height', '800px')
                   .attr('x','0px')
                   .attr('y', '0px')
+                  .call(
+                     d3.zoom()
+                       .scaleExtent([1 / 2, 8])
+                       .on("zoom", function () {
+                        svg.transition()
+                           .duration(750)
+                           .attr("transform",  d3.event.transform);
+                  }))
+                  .append("g");
 
       var arr_dt, template_body, template_header;
 
@@ -84,19 +94,27 @@
             .remove()
             .data(dataset.arr_prop)
             .enter()
-            .append('g')
-               .append('rect')
-               .attr('id', function(d) { return d.idx })
-               .attr('transform', function(d) { return d.transform; } || 0)
-               .attr('x',function(d) { return d.x; })
-               .attr('y',function(d) { return d.y - 100; } )
-               .attr('fill',function(d) { return d.booth_state == "free"?d.fill:d.booth_state == "booked"?"yellow":"red"; })
-               .attr('width',function(d) { return d.width; })
-               .attr('height',function(d) { return d.height; })
-               .attr('stroke', 'black')
-               .on("click",handle_click)
+            .append('rect')
+            .attr('id', function(d) { return d.idx })
+            .attr('transform', function(d) { return d.transform; } || 0)
+            .attr('x',function(d) { return d.x - 100; })
+            .attr('y',function(d) { return d.y - 100; } )
+            .attr('fill',function(d) { return d.booth_state == "free"?d.fill:d.booth_state == "booked"?"yellow":"red"; })
+            .attr('width',function(d) { return d.width; })
+            .attr('height',function(d) { return d.height; })
+            .attr('stroke', 'black')
+            .on("click",handle_click)
+      });
 
-      })
+      function resetted() {
+         svg.transition()
+            .duration(750)
+            .attr("transform",  d3.zoomIdentity);
+      }
+
+      d3.select("#reset")
+        .on("click", resetted);
+
       function handle_click(d){
          $('.modal-body').html('');
          $('.modal-header').html('');
