@@ -72,25 +72,28 @@
                   .attr('width','1000px')
                   .attr('height', '800px')
                   .attr('x','0px')
-                  .attr('y', '0px')
-                  .call(
-                     d3.zoom()
-                       .scaleExtent([1 / 2, 8])
-                       .on("zoom", function () {
-                        svg.transition()
-                           .duration(750)
-                           .attr("transform",  d3.event.transform);
-                  }))
-                  .append("g");
+                  .attr('y', '0px');
+                  // .call()
+      var g = svg.append("g");
 
+      var zoom =  d3.zoom()
+                     .scaleExtent([1 / 5, 4])
+                     .on("zoom", function () {
+                     g.transition()
+                        .duration(400)
+                        .attr("transform",  d3.event.transform);
+                  })
       var arr_dt, template_body, template_header;
 
       $(function(){
          template_body = Handlebars.compile($('#spec_template').html());
          template_header = Handlebars.compile($('#modal_title_template').html());
       })
+
+      svg.call(zoom);
+
       d3.json('/floorplan/index.php?/data/location', (error, dataset) => {
-         svg.selectAll('g')
+         g.selectAll('rect')
             .remove()
             .data(dataset.arr_prop)
             .enter()
@@ -108,8 +111,8 @@
 
       function resetted() {
          svg.transition()
-            .duration(750)
-            .attr("transform",  d3.zoomIdentity);
+            .duration(400)
+            .call(zoom.transform, d3.zoomIdentity);
       }
 
       d3.select("#reset")
