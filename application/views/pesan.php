@@ -77,78 +77,36 @@
             </tr>
          </table>
          <h4> Informasi Pemesan </h4>
-         <form action="<?=base_url()?>index.php?/pesan/add" method="post" name="frm_pesan">
+
+         <form class="form lead-form form-light dark-text" action="<?=base_url()?>index.php?/pesan/add" method="post" name="frm_pesan">
             <input type="hidden" name="booth_id" value="<?=$data->idx?>">
             <input type="hidden" name="booth_price" value="<?=$data->booth_price?>">
             <div class="form-group">
-               <label for="nama">Nama Pemesan</label>
+               <div class="col-sm-3 col-xs-12">
+                  <label for="nama">Nama Pemesan</label>
+               </div>
                <input type="text" class="form-control" id="nama" name="nama" placeholder="Nama">
             </div>
             <div class="form-group">
-               <label for="email">Email</label>
+               <div class="col-sm-3 col-xs-12">
+                   <label for="email">Email</label>
+               </div>
                <input type="email" class="form-control" id="email" name="email" placeholder="Email">
             </div>
             <div class="form-group">
+               <div class="col-sm-3 col-xs-12">
                <label for="no_telp">Nomor Telepon</label>
+               </div>
+
                <input type="text" class="form-control" id="no_telp" name="no_telp" placeholder="no_telp">
             </div>
-
-            <button type="submit" class="btn btn-default">Kirim</button>
-       </form>
-
-			</div>
-
-			<div id="payment-method" role="tabpanel" class="tab-pane fade" aria-labelledby="payment-method-tab">
-				<h3 class="uppercase">Payment Method</h3>
-
-				<form class="form payment-method-form">
-					<input id="payment_paypal" type="radio" name="payment-method" value="paypal" checked="checked">
-					<label for="payment_paypal" class="payment-method">
-						<i class="pseudo-radio"></i><img src="assets/img/paypal-133x35.png" alt="" class="payment-method-icon">PayPal
-					</label>
-					<input id="payment_test" type="radio" name="payment-method" value="test-payment">
-					<label for="payment_test" class="payment-method">
-						<i class="pseudo-radio"></i>Test Payment
-					</label>
-				</form>
-			</div>
-
-			<div id="billing-details" role="tabpanel" class="tab-pane fade" aria-labelledby="billing-details-tab">
-				<h3 class="uppercase">Billing Details</h3>
-
-				<form class="form billing-details-form">
-					<fieldset class="form-group">
-						<label for="email" class="required">Email Address</label>
-						<input id="email" type="email" name="email" placeholder="Email address" class="form-control required">
-					</fieldset>
-
-					<fieldset class="form-group">
-						<label for="first_name" class="required">First Name</label>
-						<input id="first_name" type="text" name="first_name" placeholder="First name" class="form-control required">
-					</fieldset>
-
-					<fieldset class="form-group">
-						<label for="last_name">Last Name</label>
-						<input id="last_name" type="text" name="last_name" placeholder="Last name" class="form-control">
-					</fieldset>
-
-					<fieldset class="result">
-						<strong>Purchase Total:</strong>
-						<span class="cart-ammount" data-subtotal="25" data-total="25">$25.00</span>
-					</fieldset>
-
-					<input type="submit" class="cart-submit btn btn-solid" value="Purchase">
-				</div>
+            <div class="form-group">
+               <button type="submit" class="btn btn-default">Kirim</button>
+            </div>
+         </form>
 			</div>
 		</div>
 	</div>
-
-	<div class="cart-checkout-navigation-controls">
-		<a href="#" class="prev hidden btn btn-outline-color">Previous</a>
-		<a href="#" class="next btn btn-solid">Next step</a>
-	</div>
-
-
 	<footer id="footer" class="footer light-text">
 		<div class="container">
 			<div class="footer-content row">
@@ -197,7 +155,7 @@
 	<!--<![endif]-->
 
 	<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="assets/js/jquery.bxslider.min.js"></script>
+	<!-- <script type="text/javascript" src="assets/js/jque  ry.bxslider.min.js"></script> -->
 	<script type="text/javascript" src="assets/js/startuply.js"></script>
 </body>
 </html>

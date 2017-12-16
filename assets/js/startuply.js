@@ -307,174 +307,174 @@ Startuply = {
         });
     },
 
-    formInit: function () {
-        var _this = this;
+   //  formInit: function () {
+   //      var _this = this;
 
-        this.log( 'Init ajaxed forms.' );
+   //      this.log( 'Init ajaxed forms.' );
 
-        if ( typeof toastr != 'undefined' ) {
-            toastr.options = {
-                positionClass: this.options.toastrPositionClass
-            };
+   //      if ( typeof toastr != 'undefined' ) {
+   //          toastr.options = {
+   //              positionClass: this.options.toastrPositionClass
+   //          };
 
-        }else {
-            this.log( 'Can\'t find toastr. Form messages in alerts.' );
-        }
+   //      }else {
+   //          this.log( 'Can\'t find toastr. Form messages in alerts.' );
+   //      }
 
-        var validateOptions,
-            submitHandler,
-            doneHandler,
-            failHandler;
+   //      var validateOptions,
+   //          submitHandler,
+   //          doneHandler,
+   //          failHandler;
 
-        mailchimpHandler = function (event) {
-            event.preventDefault();
+   //      mailchimpHandler = function (event) {
+   //          event.preventDefault();
 
-            var $firstNameField = $(this).find('[name=FNAME]'),
-                $lastNameField = $(this).find('[name=LNAME]'),
-                $fullnameField = $(this).find('[name=FULLNAME]'),
-                $emailField = $(this).find('[name=EMAIL]'),
-                $phoneField = $(this).find('[name=PHONE]'),
-                $responseBlock = $(this).find('.response'),
-                fullname, fname, lname, email, phone, data = {};
+   //          var $firstNameField = $(this).find('[name=FNAME]'),
+   //              $lastNameField = $(this).find('[name=LNAME]'),
+   //              $fullnameField = $(this).find('[name=FULLNAME]'),
+   //              $emailField = $(this).find('[name=EMAIL]'),
+   //              $phoneField = $(this).find('[name=PHONE]'),
+   //              $responseBlock = $(this).find('.response'),
+   //              fullname, fname, lname, email, phone, data = {};
 
-            if ( $fullnameField.length && $fullnameField.val().length ) {
-                fullname = $fullnameField.val().split(' ');
-                fname = fullname[0];
+   //          if ( $fullnameField.length && $fullnameField.val().length ) {
+   //              fullname = $fullnameField.val().split(' ');
+   //              fname = fullname[0];
 
-                if ( fullname.length > 1 ) lname = fullname[1];
-            }
+   //              if ( fullname.length > 1 ) lname = fullname[1];
+   //          }
 
-            if ( $firstNameField.length && $firstNameField.val().length ) fname = $firstNameField.val();
-            if ( $lastNameField.length && $lastNameField.val().length ) lname = $lastNameField.val();
-            if ( fname ) data.fname = escape(fname);
-            if ( lname ) data.lname = escape(lname);
+   //          if ( $firstNameField.length && $firstNameField.val().length ) fname = $firstNameField.val();
+   //          if ( $lastNameField.length && $lastNameField.val().length ) lname = $lastNameField.val();
+   //          if ( fname ) data.fname = escape(fname);
+   //          if ( lname ) data.lname = escape(lname);
 
-            if ( $emailField.length && $emailField.val().length ) {
-                email = $emailField.val();
-                data.email = escape(email);
-            }
+   //          if ( $emailField.length && $emailField.val().length ) {
+   //              email = $emailField.val();
+   //              data.email = escape(email);
+   //          }
 
-            if ( $phoneField.length && $phoneField.val().length ) {
-                phone = $phoneField.val();
-                data.phone = escape(phone);
-            }
+   //          if ( $phoneField.length && $phoneField.val().length ) {
+   //              phone = $phoneField.val();
+   //              data.phone = escape(phone);
+   //          }
 
-            if ( typeof toastr == 'undefined' ) $responseBlock.html('<span class="notice_message">Adding email address...</span>');
+   //          if ( typeof toastr == 'undefined' ) $responseBlock.html('<span class="notice_message">Adding email address...</span>');
 
-            data.ajax = true;
+   //          data.ajax = true;
 
-            $.ajax({
-                url: '/assets/mailchimp/inc/store-address.php',
-                data: data,
+   //          $.ajax({
+   //              url: '/assets/mailchimp/inc/store-address.php',
+   //              data: data,
 
-                success: function(msg) {
-                    if ( msg.indexOf('Success') != -1 ) {
-                        if ( typeof toastr != 'undefined' ) toastr.success('Success! You are now subscribed to our newsletter!');
-                        else if ( $responseBlock.length ) $responseBlock.html('<span class="success-message">Success! You are now subscribed to our newsletter!</span>');
+   //              success: function(msg) {
+   //                  if ( msg.indexOf('Success') != -1 ) {
+   //                      if ( typeof toastr != 'undefined' ) toastr.success('Success! You are now subscribed to our newsletter!');
+   //                      else if ( $responseBlock.length ) $responseBlock.html('<span class="success-message">Success! You are now subscribed to our newsletter!</span>');
 
-                    } else {
-                        if ( typeof toastr != 'undefined' ) toastr.error(msg);
-                        else if ( $responseBlock.length ) $responseBlock.html('<span class="error-message">' + msg + '</span>');
+   //                  } else {
+   //                      if ( typeof toastr != 'undefined' ) toastr.error(msg);
+   //                      else if ( $responseBlock.length ) $responseBlock.html('<span class="error-message">' + msg + '</span>');
 
-                    }
-                }
-            });
-        }
+   //                  }
+   //              }
+   //          });
+   //      }
 
-        submitHandler = function (event) {
-            event.preventDefault();
+   //      submitHandler = function (event) {
+   //          event.preventDefault();
 
-            var form = this;
+   //          var form = this;
 
-            $.ajax({
-                url: form.action,
-                type: 'POST',
-                data: $(form).serialize()
-            }).done(function(msg) {
-                doneHandler(msg, form);
+   //          $.ajax({
+   //              url: form.action,
+   //              type: 'POST',
+   //              data: $(form).serialize()
+   //          }).done(function(msg) {
+   //              doneHandler(msg, form);
 
-            }).fail(function() {
-                failHandler(form);
+   //          }).fail(function() {
+   //              failHandler(form);
 
-            });
-        }
+   //          });
+   //      }
 
-        validateOptions = {
-            rules: {
-                password: {
-                    required: true,
-                    minlength: 5
-                },
-                confirmPassword: {
-                    required: true,
-                    minlength: 5,
-                    equalTo: '#password'
-                }
-            },
+   //      validateOptions = {
+   //          rules: {
+   //              password: {
+   //                  required: true,
+   //                  minlength: 5
+   //              },
+   //              confirmPassword: {
+   //                  required: true,
+   //                  minlength: 5,
+   //                  equalTo: '#password'
+   //              }
+   //          },
 
-            messages: {
-                password: {
-                    required: 'Please provide a password',
-                    minlength: 'Your password must be at least 5 characters long'
-                },
-                confirmPassword: {
-                    required: 'Please provide a password',
-                    minlength: 'Your password must be at least 5 characters long',
-                    equalTo: 'Please enter the same password as above'
-                }
-            },
+   //          messages: {
+   //              password: {
+   //                  required: 'Please provide a password',
+   //                  minlength: 'Your password must be at least 5 characters long'
+   //              },
+   //              confirmPassword: {
+   //                  required: 'Please provide a password',
+   //                  minlength: 'Your password must be at least 5 characters long',
+   //                  equalTo: 'Please enter the same password as above'
+   //              }
+   //          },
 
-            submitHandler: function (form) {
-                $.ajax({
-                    url: form.action,
-                    type: 'POST',
-                    data: $(form).serialize()
-                }).done(function(msg) {
-                    doneHandler(msg, form);
+   //          submitHandler: function (form) {
+   //              $.ajax({
+   //                  url: form.action,
+   //                  type: 'POST',
+   //                  data: $(form).serialize()
+   //              }).done(function(msg) {
+   //                  doneHandler(msg, form);
 
-                }).fail(function() {
-                    failHandler(form);
+   //              }).fail(function() {
+   //                  failHandler(form);
 
-                });
-            }
-        };
+   //              });
+   //          }
+   //      };
 
-        doneHandler = function (msg, form) {
-            if( msg === 'ok' ) {
-                form.reset();
+   //      doneHandler = function (msg, form) {
+   //          if( msg === 'ok' ) {
+   //              form.reset();
 
-                if ( typeof toastr != 'undefined' ) toastr.success('Success');
-                else alert('Success');
+   //              if ( typeof toastr != 'undefined' ) toastr.success('Success');
+   //              else alert('Success');
 
-            } else {
-                if ( typeof toastr != 'undefined' ) toastr.error('An error occured. Please try again later.');
-                else alert('An error occured. Please try again later.');
+   //          } else {
+   //              if ( typeof toastr != 'undefined' ) toastr.error('An error occured. Please try again later.');
+   //              else alert('An error occured. Please try again later.');
 
-                _this.log( 'Form message', msg );
-            }
-        };
+   //              _this.log( 'Form message', msg );
+   //          }
+   //      };
 
-        failHandler = function () {
-            if ( typeof toastr != 'undefined' ) toastr.error('An error occured. Please try again later.');
-            else alert('An error occured. Please try again later.');
-        }
+   //      failHandler = function () {
+   //          if ( typeof toastr != 'undefined' ) toastr.error('An error occured. Please try again later.');
+   //          else alert('An error occured. Please try again later.');
+   //      }
 
-        if ( $('form').length ) {
-            $('form').each(function() {
-                if ( !$(this).is('.mailchimp-form') ) {
-                    if ( typeof $.fn.validate == 'function' ) {
-                        $(this).validate(validateOptions);
-                    }else {
-                        $(this).on('submit', submitHandler);
+   //      if ( $('form').length ) {
+   //          $('form').each(function() {
+   //              if ( !$(this).is('.mailchimp-form') ) {
+   //                  if ( typeof $.fn.validate == 'function' ) {
+   //                      $(this).validate(validateOptions);
+   //                  }else {
+   //                      $(this).on('submit', submitHandler);
 
-                        _this.log( 'Can\'t find jQuery.validate function.' );
-                    }
-                }else {
-                    $(this).on('submit.startuply', mailchimpHandler);
-                }
-            });
-        }
-    },
+   //                      _this.log( 'Can\'t find jQuery.validate function.' );
+   //                  }
+   //              }else {
+   //                  $(this).on('submit.startuply', mailchimpHandler);
+   //              }
+   //          });
+   //      }
+   //  },
 
     productSliderInit: function () {
         if ( $('.product-image-list').length ) {
@@ -1105,7 +1105,7 @@ Startuply = {
 
         if ( this.options.smoothScroll ) this.smoothScrollInit();
 
-        if ( this.options.ajaxedForm ) this.formInit();
+      //   if ( this.options.ajaxedForm ) this.formInit();
 
         this.windowHeightBlock();
 

@@ -197,24 +197,20 @@
                         let obj = d3.select(id)
                                  .append('svg')
                                  .attr('id',id)
-                                 .attr('width','1000px')
-                                 .attr('height', '800px')
+                                 .attr('width','1200px')
+                                 .attr('height', '600px')
                                  .attr('x','0px')
                                  .attr('y', '0px')
-                                 .append('g')
+                                 .append('g');
                         arr_zoom[idx] = d3.zoom()
                                           .scaleExtent([.6, 1.7])
                                           .on("zoom", function () {
-                                          d3.select(id)
-                                             .select('g')
-                                             .transition()
+                                          obj.transition()
                                              .duration(400)
                                              .attr("transform",  d3.event.transform);
                                           });
-                        obj.call(arr_zoom[idx]);
-                        return obj;
-                     })
-                     .map((obj,idx)=>{
+                           d3.select(id).call(arr_zoom[idx]);
+
                         let cat = idx*1+1;
                         d3.json('index.php?/data/location/'+cat, (error, dataset) => {
                            obj.selectAll('g')
@@ -225,7 +221,7 @@
                               .append('rect')
                               .attr('id', function(d) { return d.idx })
                               .attr('transform', function(d) { return d.transform; } || 0)
-                              .attr('x',function(d) { return d.x })
+                              .attr('x',function(d) { return d.x})
                               .attr('y',function(d) { return d.y - 100 } )
                               .attr('fill',function(d) { return d.booth_state == "free"?d.fill:d.booth_state == "booked"?"yellow":"red"; })
                               .attr('width',function(d) { return d.width })
