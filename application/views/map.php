@@ -238,6 +238,9 @@
       $(function(){
          template_body = Handlebars.compile($('#spec_template').html());
          template_header = Handlebars.compile($('#modal_title_template').html());
+         Handlebars.registerHelper('formatCurrency', function(value) {
+            return value.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+         });
       })
 
       function resetted() {
@@ -279,32 +282,30 @@
          $('#myModal').modal('show');
       }
 
+
+
    </script>
    <script id="spec_template" type="text/x-handlebars-template">
       <h4 class="modal-title">Booth No {{idx}}</h4>
          <table class="table">
             <tr>
                <td class="col-lg-2">Luas :</td>
-               <td>{{booth_spec.luas}}</td>
+               <td>{{booth_spec.ukuran.luas}}</td>
+               <td align="right">{{formatCurrency booth_spec.ukuran.harga}}</td>
+            </tr>
+            {{#each booth_item}}
+               <tr>
+                  <td class="col-lg-2">{{booth_item_category_nm}} </td>
+                  <td>{{booth_item_nm}}</td>
+                  <td align="right">{{formatCurrency booth_item_price}}</td>
+               </tr>
+            {{/each}}
+            <tr>
+               <td colspan="2">Total </td>
+               <td id="total"></td>
             </tr>
             <tr>
-               <td class="col-lg-2">listrik :</td>
-               <td>{{booth_spec.listrik}}</td>
-            </tr>
-            <tr>
-               <td class="col-lg-2">Meja :</td>
-               <td>{{booth_spec.Meja}}</td>
-            </tr>
-            <tr>
-               <td class="col-lg-2">Kursi :</td>
-               <td>{{booth_spec.Kursi}}</td>
-            </tr>
-            <tr>
-               <td class="col-lg-2">Harga :</td>
-               <td>{{booth_price}}</td>
-            </tr>
-            <tr>
-               <td colspan="2" align="right"><a href="<?=base_url()?>index.php?/pesan/index/{{idx}}" class="btn btn-primary">{{btn}}</a></td>
+               <td colspan="3" align="right"><a href="<?=base_url()?>index.php?/pesan/index/{{idx}}" class="btn btn-primary">{{btn}}</a></td>
             </tr>
          </table>
    </script>

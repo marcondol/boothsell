@@ -13,4 +13,9 @@ class Data extends CI_Controller {
       echo(json_encode($this->booth_model->get_location($id)));
    }
 
+   public function master_item(){
+      header('Content-Type: application/json');
+      echo(json_encode($this->booth_model->get_mast_item(), TRUE));
+   }
+
 }

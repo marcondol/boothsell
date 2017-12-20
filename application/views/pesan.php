@@ -50,6 +50,7 @@
 	</header>
 <body id="blog-page" class="product-page">
 	<!-- Preloader -->
+   ?>
 	<div class="preloader-mask">
 		<div class="preloader"><div class="spin base_clr_brd"><div class="clip left"><div class="circle"></div></div><div class="gap"><div class="circle"></div></div><div class="clip right"><div class="circle"></div></div></div></div>
 	</div>
@@ -65,22 +66,27 @@
                <td class="cart-list-item-meta"><?=$data->booth_spec->ukuran->luas?></td>
                <td class="cart-list-item-price"><?=number_format($data->booth_spec->ukuran->harga,0,",",".")?></td>
             </tr>
+            <?php
+            $tot =  $data->booth_spec->ukuran->harga;
+            foreach($data->booth_item as $item){
+               $tot += $item->booth_item_price;
+               ?>
             <tr class="cart-list-item">
-               <td class="cart-list-item-meta">Listrik :</td>
-               <td class="cart-list-item-meta"><?=$data->booth_spec->listrik->daya?></td>
-               <td class="cart-list-item-price"><?=number_format($data->booth_spec->listrik->harga,0,",",".")?></td>
+               <td class="cart-list-item-meta"><?=$item->booth_item_category_nm?></td>
+               <td class="cart-list-item-meta" id="<?=$item->booth_item_category_nm?>" data-def_item="<?=$item->booth_item_id?>"><?=$item->booth_item_nm?></td>
+               <td class="cart-list-item-price" align="right"><?=number_format($item->booth_item_price,0,",",".")?></td>
             </tr>
-
+            <?php }?>
             <tr class="cart-list-item">
                <td class="cart-list-item-meta"  colspan="2">Total :</td>
-               <td class="cart-list-item-price"><?=number_format($data->booth_price,0,",",".")?></td>
+               <td class="cart-list-item-price" align="right"><?=number_format($tot,0,",",".")?></td>
             </tr>
          </table>
          <h4> Informasi Pemesan </h4>
 
          <form class="form lead-form form-light dark-text" action="<?=base_url()?>index.php?/pesan/add" method="post" name="frm_pesan">
             <input type="hidden" name="booth_id" value="<?=$data->idx?>">
-            <input type="hidden" name="booth_price" value="<?=$data->booth_price?>">
+            <input type="hidden" name="booth_price" value="<?=$tot?>">
             <div class="form-group">
                <div class="col-sm-3 col-xs-12">
                   <label for="nama">Nama Pemesan</label>
@@ -157,5 +163,29 @@
 	<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
 	<!-- <script type="text/javascript" src="assets/js/jque  ry.bxslider.min.js"></script> -->
 	<script type="text/javascript" src="assets/js/startuply.js"></script>
+   <script type="text/javascript">
+      $(function(){
+         $.get('index.php/data/master_item', function(ret){
+            var data = ret;
+            Object.keys(data).forEach(function(d){
+               var default_dt = $(`#${d}`).data('def_item');
+               var sel_id = $(`#${d}`).id;
+               var opt = generate_option(data[d],default_dt);
+               $(`#${d}`).html(`<select id=${sel_id} style='width:100%'>`+opt+`</select>`);
+            });
+         });
+
+
+      })
+
+      function generate_option(data, def){
+         return data.map(function(d){
+                  return `<option value=${d.booth_item_id} ${d.booth_item_id==def?'selected':''}>${d.booth_item_nm}</option>`;
+               })
+               .join('');
+      }
+
+
+   </script>
 </body>
 </html>
