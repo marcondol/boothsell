@@ -64,7 +64,7 @@
             <tr class="cart-list-item">
                <td class="cart-list-item-meta">Luas :</td>
                <td class="cart-list-item-meta"><?=$data->booth_spec->ukuran->luas?></td>
-               <td class="cart-list-item-price"><?=number_format($data->booth_spec->ukuran->harga,0,",",".")?></td>
+               <td class="cart-list-item-price cart-list-item-price-row"  price='<?= $data->booth_spec->ukuran->harga ?>'   ><?=number_format($data->booth_spec->ukuran->harga,0,",",".")?></td>
             </tr>
             <?php
             $tot =  $data->booth_spec->ukuran->harga;
@@ -74,19 +74,25 @@
             <tr class="cart-list-item">
                <td class="cart-list-item-meta"><?=$item->booth_item_category_nm?></td>
                <td class="cart-list-item-meta" id="<?=$item->booth_item_category_nm?>" data-def_item="<?=$item->booth_item_id?>"><?=$item->booth_item_nm?></td>
-               <td class="cart-list-item-price" align="right"><?=number_format($item->booth_item_price,0,",",".")?></td>
+               <td class="cart-list-item-price cart-list-item-price-row" price='<?= $item->booth_item_price ?>'  id="price_cont_<?=$item->booth_item_category_nm?>" align="right"><?=number_format($item->booth_item_price,0,",",".")?></td>
             </tr>
             <?php }?>
             <tr class="cart-list-item">
                <td class="cart-list-item-meta"  colspan="2">Total :</td>
-               <td class="cart-list-item-price" align="right"><?=number_format($tot,0,",",".")?></td>
+               <td class="cart-list-item-price" id="cont_total_price" align="right"><?=number_format($tot,0,",",".")?></td>
             </tr>
          </table>
          <h4> Informasi Pemesan </h4>
 
-         <form class="form lead-form form-light dark-text" action="<?=base_url()?>index.php?/pesan/add" method="post" name="frm_pesan">
+         <form class="form lead-form form-light dark-text" id="form_order" action="<?=base_url()?>index.php?/pesan/add" method="post" name="frm_pesan">
             <input type="hidden" name="booth_id" value="<?=$data->idx?>">
-            <input type="hidden" name="booth_price" value="<?=$tot?>">
+            <input type="hidden" id="hd_total_price" name="booth_price" value="<?=$tot?>">
+			<?php foreach($data->booth_item as $item){  ?>
+			<input type="hidden" id="hd_<?=$item->booth_item_category_nm?>" name="hd_booth_item_<?=$item->booth_item_category_id?>" value="">
+			<input type="hidden" id="hd_price_item_<?=$item->booth_item_category_nm?>" name="hd_booth_item_price_<?=$item->booth_item_category_id?>" value="">	
+			<input type="hidden" name="hd_booth_item_category[]" value="<?= $item->booth_item_category_id; ?>">	
+			<?php //print_r($item) ?>
+			<?php } ?>
             <div class="form-group">
                <div class="col-sm-3 col-xs-12">
                   <label for="nama">Nama Pemesan</label>
@@ -165,25 +171,67 @@
 	<script type="text/javascript" src="assets/js/startuply.js"></script>
    <script type="text/javascript">
       $(function(){
-         $.get('index.php/data/master_item', function(ret){
+         $('#form_order').submit(function(){
+			$('select.item-cart').each(function(i,o){
+				let name = $(o).attr('id')
+				name = name.replace('cb','hd');
+				$('#'+ name).val($(o).val())
+				name = name.replace('hd', 'price_cont')
+				// console.log(name)
+				let price = $('#'+ name).attr('price')
+				// console.log(price)
+				name = name.replace('price_cont', 'hd_price_item')
+				// console.log(name)
+				
+				$('#'+ name).val(price)
+				// console.log($('#'+ name).val())
+			})
+			return true;
+		 })
+		 $.get('index.php/data/master_item', function(ret){
             var data = ret;
             Object.keys(data).forEach(function(d){
                var default_dt = $(`#${d}`).data('def_item');
                var sel_id = $(`#${d}`).id;
                var opt = generate_option(data[d],default_dt);
-               $(`#${d}`).html(`<select id=${sel_id} style='width:100%'>`+opt+`</select>`);
+               var cb =  $(`#${d}`).html(`<select id=${"cb_" + d} class='item-cart' target_price =${'price_cont_' + d} style='width:100%'>`+opt+`</select>`);
+			   cb.on('change', function(e){
+				   var selectVal = $(e.target).val()
+				   var target_price = $('#'+ $(e.target).attr("target_price"))
+				   $(e.target.childNodes).each(function(i,opt){
+					   if($(opt).val()==selectVal){
+						   target_price.html(formatRupiah($(opt).attr('price')))	
+						   target_price.attr('price',$(opt).attr('price'))
+						   calculateTotal()
+					   }
+				   })
+				   
+			   })
             });
          });
-
-
       })
+
+	  function calculateTotal(){
+		var total = 0;
+		$('td.cart-list-item-price-row').each(function(i, o){
+			total += parseFloat( $(o).attr('price'))
+		})
+		$('#cont_total_price').text(formatRupiah(total))
+		$('#hd_total_price').val(total)
+	  }
 
       function generate_option(data, def){
          return data.map(function(d){
-                  return `<option value=${d.booth_item_id} ${d.booth_item_id==def?'selected':''}>${d.booth_item_nm}</option>`;
+				  return `<option value=${d.booth_item_id} ${d.booth_item_id==def?'selected':''} price=${d.booth_item_price}  >${d.booth_item_nm}</option>`;
                })
                .join('');
       }
+
+
+	  const formatRupiah = (x) => {
+		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+	  }
+
 
 
    </script>

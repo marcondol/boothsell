@@ -243,7 +243,7 @@
          });
       })
 
-      svg.call(zoom);
+      //svg.call(zoom);
 
       d3.json('/boothsell/index.php?/data/location', (error, dataset) => {
          g.selectAll('rect')

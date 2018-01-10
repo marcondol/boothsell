@@ -24,10 +24,20 @@ class Pesan extends CI_Controller {
       $arr_data['email'] = $this->input->post('email');
       $arr_data['booth_price'] = $this->input->post('booth_price');
       $arr_data['confirmation_hash'] = hash('sha256', $tmp_stamp);
-      $this->pesan_model->create_order($arr_data);
-      $this->pesan_model->send_confirm_mail($arr_data['email'], $arr_data['confirmation_hash']);
-      $data = $this->booth_model->get_booth_detail($idx);
-      $this->load->view('sukses',$data);
+
+      $itemIDs = $this->input->post('hd_booth_item_category');
+      $items = [];
+      for($i =0; $i<count($itemIDs); $i++){
+            $items[] = array('booth_item_id'=>$this->input->post('hd_booth_item_'.$itemIDs[$i]), 
+                              'booth_item_category_id'=>$itemIDs[$i],
+                              'item_qty'=>1,
+                              'item_price'=>$this->input->post('hd_booth_item_price_'.$itemIDs[$i]));
+      }
+      // print_r($items);
+      $this->pesan_model->create_order($arr_data, $items);
+      //$this->pesan_model->send_confirm_mail($arr_data['email'], $arr_data['confirmation_hash']);
+      //$data = $this->booth_model->get_booth_detail($idx);
+      //$this->load->view('sukses',$data);
    }
 
    public function email_verification($hash){

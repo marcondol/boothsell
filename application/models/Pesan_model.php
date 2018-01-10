@@ -5,8 +5,16 @@ class Pesan_model extends CI_Model {
       parent::__construct();
    }
 
-   public function create_order($arr_data){
+   public function create_order($arr_data, $items = [] ){
       $this->db->insert("booth_order", $arr_data);
+      $booking_id = $this->db->insert_id();
+      if(count($items)>0){
+        for($i=0; $i<count($items); $i++){
+            $items[$i]['booking_id'] = $booking_id;
+            $items[$i]['totap_price'] = $items[$i]['item_qty'] * $items[$i]['item_price'];
+            $this->db->insert("boot_order_item", $items[$i]);
+        }
+      }
    }
 
    public function get_confirm_email($hash){

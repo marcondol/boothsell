@@ -26,7 +26,7 @@ class Booth_model extends CI_Model {
    }
 
    public function get_default_item($booth_item_default){
-      $qitem = "SELECT a.booth_item_id,b.booth_item_category_nm, a.booth_item_nm, a.booth_item_price FROM mast_booth_item a"
+      $qitem = "SELECT a.booth_item_id,b.booth_item_category_nm, a.booth_item_nm, a.booth_item_price, a.booth_item_category_id FROM mast_booth_item a"
                 . " LEFT JOIN mast_booth_item_category b on a.booth_item_category_id = b.booth_item_category_id "
                 . " WHERE a.booth_item_id in ($booth_item_default)";
       return $this->db->query($qitem)->result();
