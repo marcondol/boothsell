@@ -92,7 +92,7 @@
 
       svg.call(zoom);
 
-      d3.json('/floorplan/index.php?/data/location', (error, dataset) => {
+      d3.json('/boothsell/index.php?/data/location', (error, dataset) => {
          g.selectAll('rect')
             .remove()
             .data(dataset.arr_prop)
@@ -102,7 +102,10 @@
             .attr('transform', function(d) { return d.transform; } || 0)
             .attr('x',function(d) { return d.x - 100; })
             .attr('y',function(d) { return d.y - 100; } )
-            .attr('fill',function(d) { return d.booth_state == "free"?d.fill:d.booth_state == "booked"?"yellow":"red"; })
+            .attr('fill',function(d) { 
+                console.log(d.booth_state)
+                return d.booth_state == "free"?d.fill:d.booth_state == "booked"?"yellow":"red";
+               })
             .attr('width',function(d) { return d.width; })
             .attr('height',function(d) { return d.height; })
             .attr('stroke', 'black')
@@ -121,6 +124,7 @@
       function handle_click(d){
          $('.modal-body').html('');
          $('.modal-header').html('');
+         console.log(d)
          d.btn = "Pesan";
          if(d.booth_state == 'sold'){
             var html_header = template_header({"title":"Booth Sudah Terjual"});
