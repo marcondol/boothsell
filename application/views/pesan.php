@@ -1,101 +1,191 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alokasi Booth</title>
-    <!-- Latest compiled and minified CSS -->
-   <link rel="stylesheet" href="assets/css/bootstrap.min.css" >
-   <script src="assets/js/jquery.min.js" > </script>
-   <script src="assets/js/d3.min.js" > </script>
-   <script src="assets/js/bootstrap.min.js" ></script>
-   <script src="assets/js/handlebars.js" ></script>
-  </head>
-  <body>
-
-  <body>
-   <?php
-      $data = $arr_prop[0]
+<!doctype html>
+<?php
+      $data = $arr_prop[0];
    ?>
-    <!-- Fixed navbar -->
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Project name</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="#">Home</a></li>
-            <li class="active"><a href="#">Perhisasan</a></li>
-            <li><a href="#">Pakaian</a></li>
-            <li><a href="#">Aksesoris</a></li>
-            <!-- <li><a href="#"><span class="glyphicon glyphicon-shopping-cart icon-large" aria-hidden="true"></span>Keranjang</a></li> -->
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-      </div>
-    </nav>
-   <div class="container">
-      <br>
-      <div class="page-header">
-        <h4 class="modal-title">Anda akan memesan</h4>
-        <h4 class="modal-title">Nomor Booth <?=$data->idx?></h4>
-      </div>
-         <table class="table">
-            <tr>
-               <td class="col-lg-2">Luas :</td>
-               <td><?=$data->booth_spec->luas?></td>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8">
+	<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<title>Home</title>
+	<meta name="description" content="Startups template">
+	<meta name="keywords" content="Startups template">
+	<link rel="shortcut icon" href="assets/img/favicon.ico">
+	<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.jpg">
+	<link rel="apple-touch-icon" sizes="72x72" href="assets/img/apple-touch-icon-72x72.jpg">
+	<link rel="apple-touch-icon" sizes="114x114" href="assets/img/apple-touch-icon-114x114.jpg">
+	<link rel="stylesheet" type="text/css" href="assets/css/custom-animations.css" />
+	<link rel="stylesheet" type="text/css" href="assets/css/lib/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+
+	<!--[if lt IE 9]>
+		<script src="assets/js/html5shiv.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+	<![endif]-->
+</head>
+<header>
+		<nav class="navigation navigation-header">
+			<div class="container">
+				<div class="navigation-brand">
+					<div class="brand-logo">
+						Fashion Week
+					</div>
+				</div>
+				<button class="navigation-toggle">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<div class="navigation-navbar collapsed">
+					<ul class="navigation-bar navigation-bar-left">
+						<li><a href="#hero">Home</a></li>
+						<li><a href="#about">Booth Map</a></li>
+
+					</ul>
+
+				</div>
+			</div>
+		</nav>
+	</header>
+<body id="blog-page" class="product-page">
+	<!-- Preloader -->
+   ?>
+	<div class="preloader-mask">
+		<div class="preloader"><div class="spin base_clr_brd"><div class="clip left"><div class="circle"></div></div><div class="gap"><div class="circle"></div></div><div class="clip right"><div class="circle"></div></div></div></div>
+	</div>
+
+	<div id="hero" class="static-header window-height dark-text hero-section waiting-list-version clearfix">
+		<div class="cart-checkout-content tab-content">
+			<div id="review-order" role="tabpanel" class="tab-pane fade active in" aria-labelledby="review-order-tab">
+				<h3 class="uppercase">Order anda </h3>
+
+				<table class="cart-list">
+            <tr class="cart-list-item">
+               <td class="cart-list-item-meta">Luas :</td>
+               <td class="cart-list-item-meta"><?=$data->booth_spec->ukuran->luas?></td>
+               <td class="cart-list-item-price"><?=number_format($data->booth_spec->ukuran->harga,0,",",".")?></td>
             </tr>
-            <tr>
-               <td class="col-lg-2">listrik :</td>
-               <td><?=$data->booth_spec->listrik?></td>
+            <?php
+            $tot =  $data->booth_spec->ukuran->harga;
+            foreach($data->booth_item as $item){
+               $tot += $item->booth_item_price;
+               ?>
+            <tr class="cart-list-item">
+               <td class="cart-list-item-meta"><?=$item->booth_item_category_nm?></td>
+               <td class="cart-list-item-meta" id="<?=$item->booth_item_category_nm?>" data-def_item="<?=$item->booth_item_id?>"><?=$item->booth_item_nm?></td>
+               <td class="cart-list-item-price" align="right"><?=number_format($item->booth_item_price,0,",",".")?></td>
             </tr>
-            <tr>
-               <td class="col-lg-2">Meja :</td>
-               <td><?=$data->booth_spec->Meja?></td>
-            </tr>
-            <tr>
-               <td class="col-lg-2">Kursi :</td>
-               <td><?=$data->booth_spec->Kursi?></td>
-            </tr>
-            <tr>
-               <td class="col-lg-2">Harga :</td>
-               <td><?="Rp ".number_format($data->booth_price,0,",",".")?></td>
+            <?php }?>
+            <tr class="cart-list-item">
+               <td class="cart-list-item-meta"  colspan="2">Total :</td>
+               <td class="cart-list-item-price" align="right"><?=number_format($tot,0,",",".")?></td>
             </tr>
          </table>
          <h4> Informasi Pemesan </h4>
-         <form action="<?=base_url()?>index.php?/pesan/add" method="post" name="frm_pesan">
+
+         <form class="form lead-form form-light dark-text" action="<?=base_url()?>index.php?/pesan/add" method="post" name="frm_pesan">
             <input type="hidden" name="booth_id" value="<?=$data->idx?>">
-            <input type="hidden" name="booth_price" value="<?=$data->booth_price?>">
+            <input type="hidden" name="booth_price" value="<?=$tot?>">
             <div class="form-group">
-               <label for="nama">Nama Pemesan</label>
+               <div class="col-sm-3 col-xs-12">
+                  <label for="nama">Nama Pemesan</label>
+               </div>
                <input type="text" class="form-control" id="nama" name="nama" placeholder="Nama">
             </div>
             <div class="form-group">
-               <label for="email">Email</label>
+               <div class="col-sm-3 col-xs-12">
+                   <label for="email">Email</label>
+               </div>
                <input type="email" class="form-control" id="email" name="email" placeholder="Email">
             </div>
             <div class="form-group">
+               <div class="col-sm-3 col-xs-12">
                <label for="no_telp">Nomor Telepon</label>
+               </div>
+
                <input type="text" class="form-control" id="no_telp" name="no_telp" placeholder="no_telp">
             </div>
+            <div class="form-group">
+               <button type="submit" class="btn btn-default">Kirim</button>
+            </div>
+         </form>
+			</div>
+		</div>
+	</div>
+	<footer id="footer" class="footer light-text">
+		<div class="container">
+			<div class="footer-content row">
+				<div class="col-sm-4 col-xs-12">
+					<div class="logo-wrapper">
+						<img width="130" height="31" src="assets/img/logo-white.png" alt="logo" />
+					</div>
+					<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco. Qui officia deserunt mollit anim id est laborum. Ut enim ad minim veniam, quis nostrud exercitation ullamco. Nisi ut aliquid ex ea commodi consequatur?</p>
+					<p><strong>John Doeson, Founder</strong>.</p>
+				</div>
+				<div class="col-sm-5 social-wrap col-xs-12">
+					<strong class="heading">Social Networks</strong>
+					<ul class="list-inline socials">
+						<li><a href="#"><span class="icon icon-socialmedia-08"></span></a></li>
+						<li><a href="#"><span class="icon icon-socialmedia-09"></span></a></li>
+						<li><a href="#"><span class="icon icon-socialmedia-16"></span></a></li>
+						<li><a href="#"><span class="icon icon-socialmedia-04"></span></a></li>
+					</ul>
+					<ul class="list-inline socials">
+						<li><a href="#"><span class="icon icon-socialmedia-07"></span></a></li>
+						<li><a href="#"><span class="icon icon-socialmedia-16"></span></a></li>
+						<li><a href="#"><span class="icon icon-socialmedia-09"></span></a></li>
+						<li><a href="#"><span class="icon icon-socialmedia-08"></span></a></li>
+					</ul>
+				</div>
+				<div class="col-sm-3 col-xs-12">
+					<strong class="heading">Our Contacts</strong>
+					<ul class="list-unstyled">
+						<li><span class="icon icon-chat-messages-14"></span><a href="mailto:info@startup.ly">info@startup.ly</a></li>
+						<li><span class="icon icon-seo-icons-34"></span>2901 Marmora road, Glassgow, Seattle, WA 98122-1090</li>
+						<li><span class="icon icon-seo-icons-17"></span>1 - 234-456-7980</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="copyright">Fashion week 2018</div>
+	</footer>
 
-            <button type="submit" class="btn btn-default">Kirim</button>
-       </form>
+	<div class="back-to-top"><i class="fa fa-angle-up fa-3x"></i></div>
 
-   </div>
-    <!-- Begin page content -->
+	<!--[if lt IE 9]>
+		<script type="text/javascript" src="assets/js/jquery-1.11.3.min.js?ver=1"></script>
+	<![endif]-->
+	<!--[if (gte IE 9) | (!IE)]><!-->
+		<script type="text/javascript" src="assets/js/jquery-2.1.4.min.js?ver=1"></script>
+	<!--<![endif]-->
 
-
-    <!-- <script type="text/javascript" src="assets/dist/app.bundle.js"></script> -->
+	<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+	<!-- <script type="text/javascript" src="assets/js/jque  ry.bxslider.min.js"></script> -->
+	<script type="text/javascript" src="assets/js/startuply.js"></script>
    <script type="text/javascript">
+      $(function(){
+         $.get('index.php/data/master_item', function(ret){
+            var data = ret;
+            Object.keys(data).forEach(function(d){
+               var default_dt = $(`#${d}`).data('def_item');
+               var sel_id = $(`#${d}`).id;
+               var opt = generate_option(data[d],default_dt);
+               $(`#${d}`).html(`<select id=${sel_id} style='width:100%'>`+opt+`</select>`);
+            });
+         });
+
+
+      })
+
+      function generate_option(data, def){
+         return data.map(function(d){
+                  return `<option value=${d.booth_item_id} ${d.booth_item_id==def?'selected':''}>${d.booth_item_nm}</option>`;
+               })
+               .join('');
+      }
+
 
    </script>
-   </body>
+</body>
 </html>

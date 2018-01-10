@@ -8,9 +8,14 @@ class Data extends CI_Controller {
       $this->load->model('booth_model');
    }
 
-	public function location(){
+	public function location($id){
       header('Content-Type: application/json');
-      echo(json_encode($this->booth_model->get_location('')));
+      echo(json_encode($this->booth_model->get_location($id)));
+   }
+
+   public function master_item(){
+      header('Content-Type: application/json');
+      echo(json_encode($this->booth_model->get_mast_item(), TRUE));
    }
 
 }
